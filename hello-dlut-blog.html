@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hello everyone · Dlut | 手绘成长手账</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,400;1,600;1,700&family=Quicksand:wght@400;500;600;700&family=Baloo+2:wght@500;600;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   Hello everyone · Dlut — 手绘梦幻个人成长博客（单文件）
+   字体: Fraunces(标题斜体) / Quicksand(正文) / Baloo 2(注解) / ZCOOL KuaiLe(中文)
+   ================================================================ */
+:root{
+  --ink:#34435e;
+  --ink-soft:#5f6f8c;
+  --ink-faint:#93a1b8;
+  --paper:rgba(255,255,255,.78);
+  --card-radius:26px;
+  --accent:#ff9d6c;
+  --accent2:#ff8fab;
+  --shadow-soft:0 18px 40px -18px rgba(60,80,120,.45);
+  --shadow-pop:0 26px 60px -20px rgba(60,80,120,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Quicksand','ZCOOL KuaiLe','Microsoft YaHei',sans-serif;
+  color:var(--ink);
+  min-height:100vh;
+  background:
+    radial-gradient(900px 520px at 78% -8%, rgba(255,224,178,.55) 0%, transparent 60%),
+    radial-gradient(820px 480px at 8% 4%, rgba(179,224,255,.5) 0%, transparent 58%),
+    linear-gradient(180deg,#eaf4ff 0%,#f2f7ff 42%,#fdf3ec 100%);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+button{font-family:inherit}
+
+/* ===== 背景漂浮装饰：云 + 手绘小星星 ===== */
+.bg-deco{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-deco .cloud{position:absolute;opacity:.5;animation:drift linear infinite}
+@keyframes drift{from{transform:translateX(-25vw)}to{transform:translateX(125vw)}}
+.bg-deco .cloud:nth-child(1){top:12%;animation-duration:64s}
+.bg-deco .cloud:nth-child(2){top:36%;animation-duration:88s;opacity:.35}
+.bg-deco .cloud:nth-child(3){top:64%;animation-duration:76s;opacity:.3}
+.bg-deco .sparkle{position:absolute;opacity:.55;animation:twinkleS 4s ease-in-out infinite}
+@keyframes twinkleS{0%,100%{opacity:.15;transform:scale(.7) rotate(0deg)}50%{opacity:.7;transform:scale(1.1) rotate(18deg)}}
+
+/* ===== 顶部标题 ===== */
+header.site{position:relative;z-index:2;text-align:center;padding:52px 20px 10px}
+.hello-tag{
+  display:inline-block;font-family:'Baloo 2','ZCOOL KuaiLe',cursive;font-size:13px;font-weight:600;
+  letter-spacing:3px;color:#fff;padding:6px 20px;border-radius:999px;
+  background:linear-gradient(120deg,#ffb56b,#ff8fab);box-shadow:0 8px 20px -8px rgba(255,143,171,.7);
+  transform:rotate(-1.5deg);margin-bottom:18px;
+}
+header.site .logo{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:clamp(40px,7vw,66px);
+  font-weight:600;font-style:italic;letter-spacing:.5px;line-height:1.05;
+  color:var(--ink);position:relative;display:inline-block;
+}
+header.site .logo .dot{color:var(--accent2)}
+.squiggle{display:block;margin:10px auto 6px;width:190px;height:14px}
+header.site .sub{
+  font-size:14px;letter-spacing:8px;color:var(--ink-soft);margin-top:8px;
+  font-family:'Baloo 2','Quicksand',sans-serif;font-weight:700;text-transform:uppercase;
+}
+header.site .sub-cn{
+  font-family:'ZCOOL KuaiLe','Quicksand',cursive;font-size:13.5px;color:var(--ink-faint);
+  letter-spacing:5px;margin-top:8px;
+}
+header.site .date-line{
+  font-family:'Baloo 2',sans-serif;font-size:12.5px;color:var(--ink-faint);letter-spacing:2px;margin-top:10px;
+}
+
+/* ===== 实时信息条（真实 API） ===== */
+.livebar{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:24px auto 4px;padding:0 16px;position:relative;z-index:5}
+.pill{
+  display:flex;align-items:center;gap:9px;cursor:pointer;border:none;
+  font-size:14px;color:var(--ink);padding:12px 22px;border-radius:999px;
+  background:var(--paper);box-shadow:var(--shadow-soft),inset 0 0 0 2px rgba(255,255,255,.65);
+  backdrop-filter:blur(8px);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;
+  max-width:min(560px,100%);
+}
+.pill:hover{transform:translateY(-3px) rotate(-.5deg);box-shadow:var(--shadow-pop),inset 0 0 0 2px #ffd2a8}
+.pill .p-ico{font-size:19px;animation:bob 3.5s ease-in-out infinite}
+.pill .p-refresh{font-family:'Baloo 2',sans-serif;font-size:11px;color:var(--ink-faint);white-space:nowrap;letter-spacing:1px}
+#quoteText{font-family:'ZCOOL KuaiLe',cursive;font-weight:400}
+.pill .p-from{color:var(--ink-faint);font-size:12px;white-space:nowrap}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* ===== 竞赛搜索 ===== */
+.searchbar{position:relative;z-index:6;display:flex;justify-content:center;margin:30px auto 6px;padding:0 16px}
+.searchbox{position:relative;width:min(560px,100%)}
+.searchbox input{
+  width:100%;border:none;outline:none;font-family:inherit;font-size:16.5px;color:var(--ink);
+  padding:16px 54px 16px 24px;border-radius:999px;background:rgba(255,255,255,.82);
+  box-shadow:var(--shadow-soft),inset 0 0 0 2px rgba(255,255,255,.6);backdrop-filter:blur(8px);
+  transition:transform .25s,box-shadow .25s;
+}
+.searchbox input::placeholder{color:#9aa6bd;font-family:'ZCOOL KuaiLe',cursive}
+.searchbox input:focus{transform:translateY(-2px);box-shadow:var(--shadow-pop),inset 0 0 0 2px #ffd2a8}
+.searchbox .s-ico{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:19px;pointer-events:none;animation:bob 3s ease-in-out infinite}
+.suggest{
+  position:absolute;top:calc(100% + 10px);left:0;right:0;z-index:40;
+  background:rgba(255,255,255,.96);border-radius:20px;box-shadow:var(--shadow-pop);
+  overflow:hidden;display:none;backdrop-filter:blur(10px);padding:6px;
+}
+.suggest.show{display:block;animation:pop .18s ease}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.suggest .row{
+  padding:12px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  gap:10px;font-size:14.5px;border-radius:14px;transition:background .15s;font-family:'ZCOOL KuaiLe',cursive;
+}
+.suggest .row.hl,.suggest .row:hover{background:#fff0e0}
+.suggest .row.shown-row{background:#f0faf2}
+.suggest .row.shown-row:hover{background:#e3f5e8}
+.suggest .row.shown-row .r-cat{color:#5da271}
+@keyframes cardFlash{0%,100%{box-shadow:var(--shadow-pop)}40%,60%{box-shadow:0 0 0 7px rgba(255,157,108,.75),var(--shadow-pop)}}
+.comp-card.flash{animation:cardFlash 1.15s ease}
+.suggest .row .r-cat{color:var(--ink-faint);font-size:12px;font-family:'Baloo 2','Quicksand',sans-serif;white-space:nowrap}
+.suggest .row .r-month{color:var(--accent);font-size:11.5px;font-family:'Baloo 2',sans-serif;white-space:nowrap}
+.suggest .row b{color:#e8804f;font-weight:700}
+.suggest .empty{padding:16px 20px;color:#9aa6bd;font-size:13.5px;font-family:'ZCOOL KuaiLe',cursive}
+.search-hint{text-align:center;color:var(--ink-faint);font-size:12px;margin-top:10px;font-family:'Baloo 2','ZCOOL KuaiLe',sans-serif;letter-spacing:1px}
+
+/* ===== 主体 ===== */
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:38px 4px 18px}
+.sec-title{font-family:'ZCOOL KuaiLe',cursive;font-size:24px;font-weight:400;color:var(--ink)}
+.sec-en{font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:var(--ink-faint)}
+.sec-count{margin-left:auto;font-family:'Baloo 2',sans-serif;font-size:12px;color:var(--ink-faint);background:rgba(255,255,255,.6);padding:4px 12px;border-radius:999px;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:26px}
+.comp-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+
+/* ===== 成长大卡片 ===== */
+.card{
+  position:relative;border-radius:var(--card-radius);overflow:hidden;min-height:330px;cursor:pointer;color:#fff;
+  box-shadow:var(--shadow-soft);isolation:isolate;
+  transition:transform .35s cubic-bezier(.2,.8,.3,1),box-shadow .35s;
+}
+.card.card-in{animation:cardIn .65s cubic-bezier(.2,.8,.3,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.95) rotate(2deg)}to{opacity:1;transform:none}}
+.grid .card:nth-child(odd){transform:rotate(-.6deg)}
+.grid .card:nth-child(even){transform:rotate(.5deg)}
+.card:hover{transform:translateY(-9px) scale(1.02) rotate(0deg);box-shadow:var(--shadow-pop);z-index:3}
+.card .scene{position:absolute;inset:0;z-index:0;overflow:hidden}
+.card .content{position:relative;z-index:3;padding:22px 24px;display:flex;flex-direction:column;height:100%;min-height:330px;text-shadow:0 2px 10px rgba(25,35,65,.4)}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start}
+.card .badge{
+  width:46px;height:46px;border-radius:50% 46% 52% 48%/48% 52% 46% 54%;
+  background:rgba(255,255,255,.28);backdrop-filter:blur(5px);
+  display:flex;align-items:center;justify-content:center;font-size:23px;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.4);
+}
+.card .badge{animation:badgeWobble 5s ease-in-out infinite}
+@keyframes badgeWobble{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}
+.card .del{
+  width:30px;height:30px;border-radius:50%;border:none;cursor:pointer;color:#fff;font-size:15px;line-height:1;
+  background:rgba(255,255,255,.25);backdrop-filter:blur(4px);opacity:0;transform:scale(.6);transition:.25s;
+}
+.card:hover .del{opacity:1;transform:scale(1)}
+.card .del:hover{background:rgba(255,90,90,.9);transform:scale(1.12) rotate(90deg)}
+.card .card-year{font-family:'Baloo 2',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;opacity:.9;margin:16px 0 4px}
+.card .card-title{font-family:'ZCOOL KuaiLe',cursive;font-size:27px;line-height:1.15;font-weight:400}
+.card .card-en{font-family:'Fraunces',serif;font-style:italic;font-size:13px;opacity:.9;margin-top:5px;letter-spacing:.5px}
+.card .spacer{flex:1}
+.card .card-desc{font-size:14px;line-height:1.7;font-weight:500;opacity:.96;margin-bottom:14px}
+.card .card-foot{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:600}
+.card .scene-tag{
+  padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.22);
+  backdrop-filter:blur(4px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);
+  font-family:'Baloo 2','ZCOOL KuaiLe',sans-serif;
+}
+.card .go-detail{font-family:'Baloo 2',sans-serif;letter-spacing:1px;opacity:.9;transition:.2s}
+.card:hover .go-detail{transform:translateX(4px)}
+/* 手账胶带 */
+.tape{
+  position:absolute;top:9px;left:50%;width:86px;height:22px;z-index:4;
+  transform:translateX(-50%) rotate(-3.5deg);pointer-events:none;
+  background:linear-gradient(105deg,rgba(255,214,165,.6),rgba(255,190,200,.55));
+  box-shadow:0 2px 6px rgba(120,90,60,.15);border-left:2px dashed rgba(255,255,255,.7);border-right:2px dashed rgba(255,255,255,.7);
+}
+
+/* ===== 竞赛小卡片 ===== */
+.comp-card{
+  position:relative;border-radius:20px;overflow:hidden;min-height:176px;cursor:pointer;color:#fff;
+  box-shadow:0 14px 32px -16px rgba(60,80,120,.5);isolation:isolate;
+  transition:transform .35s cubic-bezier(.2,.8,.3,1),box-shadow .35s;
+}
+.comp-card.card-in{animation:cardIn .6s cubic-bezier(.2,.8,.3,1) both}
+.comp-grid .comp-card:nth-child(3n+1){transform:rotate(-.7deg)}
+.comp-grid .comp-card:nth-child(3n+2){transform:rotate(.6deg)}
+.comp-grid .comp-card:nth-child(3n){transform:rotate(-.2deg)}
+.comp-card:hover{transform:translateY(-7px) scale(1.03) rotate(0deg);box-shadow:var(--shadow-pop);z-index:3}
+.comp-card .scene{position:absolute;inset:0;z-index:0;overflow:hidden}
+.comp-card .scene::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,30,60,0) 30%,rgba(18,28,55,.28) 100%)}
+.comp-card .content{position:relative;z-index:3;padding:16px 17px;display:flex;flex-direction:column;height:100%;min-height:176px;text-shadow:0 2px 8px rgba(25,35,65,.4)}
+.comp-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.comp-card .cat-tag{
+  font-size:11px;font-weight:600;padding:4px 11px;border-radius:999px;white-space:nowrap;
+  background:rgba(255,255,255,.26);backdrop-filter:blur(4px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);
+  font-family:'Baloo 2','ZCOOL KuaiLe',sans-serif;
+}
+.comp-card .del{
+  width:25px;height:25px;border-radius:50%;border:none;cursor:pointer;color:#fff;font-size:12px;line-height:1;flex:none;
+  background:rgba(255,255,255,.25);backdrop-filter:blur(4px);opacity:0;transform:scale(.6);transition:.25s;
+}
+.comp-card:hover .del{opacity:1;transform:scale(1)}
+.comp-card .del:hover{background:rgba(255,90,90,.9)}
+.comp-card .comp-name{
+  font-family:'ZCOOL KuaiLe',cursive;font-size:16.5px;line-height:1.4;font-weight:400;margin-top:12px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.comp-card .spacer{flex:1}
+.comp-card .comp-foot{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-family:'Baloo 2',sans-serif;letter-spacing:.5px}
+.comp-card .comp-month{background:rgba(255,255,255,.22);padding:3px 9px;border-radius:999px;white-space:nowrap}
+.comp-card .go-web{opacity:.92;transition:.2s}
+.comp-card:hover .go-web{transform:translate(3px,-2px)}
+
+/* ===== 空状态 / 恢复 ===== */
+.card.empty-state{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+  color:var(--ink-soft);background:rgba(255,255,255,.5);border:2px dashed #cfc3e3;
+  box-shadow:none;text-shadow:none;backdrop-filter:blur(4px);min-height:230px;
+}
+.card.empty-state .e-ico{font-size:42px;animation:badgeWobble 4s ease-in-out infinite}
+.card.empty-state .e-t{font-family:'ZCOOL KuaiLe',cursive;font-size:16px}
+.reset-btn{
+  border:none;cursor:pointer;color:#fff;font-family:'ZCOOL KuaiLe',cursive;font-size:14px;
+  padding:10px 24px;border-radius:999px;background:linear-gradient(120deg,#ffb56b,#ff8fab);
+  box-shadow:0 10px 22px -10px rgba(255,143,171,.8);transition:transform .2s;position:relative;overflow:hidden;
+}
+.reset-btn:hover{transform:translateY(-3px) scale(1.04)}
+
+/* ===== 页脚 ===== */
+footer{position:relative;z-index:2;text-align:center;color:var(--ink-soft);font-size:12.5px;padding:6px 20px 36px;line-height:2}
+footer .f-heart{color:var(--accent2);animation:beat 1.6s ease-in-out infinite;display:inline-block}
+@keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.25)}24%{transform:scale(1)}}
+
+/* ===== Toast ===== */
+.toast{
+  position:fixed;left:50%;bottom:32px;transform:translate(-50%,90px);
+  background:rgba(52,67,94,.95);color:#fff;padding:13px 28px;border-radius:999px;
+  font-size:14px;z-index:99;opacity:0;transition:.4s cubic-bezier(.2,.8,.3,1);box-shadow:var(--shadow-pop);
+  font-family:'ZCOOL KuaiLe',cursive;max-width:88vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  pointer-events:none;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ============ 七套天气场景（CSS 动画） ============ */
+.sky-clear{background:linear-gradient(160deg,#6ec1ff 0%,#a5ddff 52%,#ffe9b3 100%)}
+.sky-cloudy{background:linear-gradient(160deg,#9db8d6 0%,#c3d3e8 55%,#eef2f9 100%)}
+.sky-rain{background:linear-gradient(160deg,#6b7f9e 0%,#8ba0bd 55%,#b9c6da 100%)}
+.sky-snow{background:linear-gradient(160deg,#a8c3de 0%,#cfe0f1 55%,#f3f8ff 100%)}
+.sky-storm{background:linear-gradient(160deg,#47517a 0%,#5a6494 55%,#8d95bd 100%)}
+.sky-fog{background:linear-gradient(160deg,#b6c1cf 0%,#d3dae4 55%,#eef1f5 100%)}
+.sky-night{background:linear-gradient(160deg,#232c54 0%,#3d3a6e 55%,#6b5a94 100%)}
+
+/* 太阳（带手绘笑脸） */
+.sun{position:absolute;top:-26px;right:-22px;width:118px;height:118px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,#fff6cf,#ffd35e 60%,#ffb347);
+  box-shadow:0 0 50px 12px rgba(255,210,90,.6);animation:sunPulse 5s ease-in-out infinite}
+@keyframes sunPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.sun .sunface{position:absolute;inset:0}
+.sun .sunface::before{content:'';position:absolute;top:44%;left:32%;width:8px;height:8px;border-radius:50%;
+  background:rgba(150,90,20,.55);box-shadow:28px 0 0 rgba(150,90,20,.55)}
+.sun .sunface::after{content:'';position:absolute;top:54%;left:50%;width:22px;height:11px;transform:translateX(-50%);
+  border-radius:0 0 22px 22px;border-bottom:3px solid rgba(150,90,20,.55)}
+.sunrays{position:absolute;top:32px;right:32px;width:0;height:0;animation:spin 26s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ray{position:absolute;top:0;left:0;width:150px;height:5px;transform-origin:0 center;
+  background:linear-gradient(90deg,rgba(255,225,150,.55),transparent 85%)}
+
+/* 云朵（分区错相漂移） */
+.puff{position:absolute;background:rgba(255,255,255,.93);border-radius:50%;filter:blur(.3px)}
+.puff.flat{border-radius:40px}
+.cloudgrp{position:absolute;animation:floatX linear infinite;will-change:transform}
+@keyframes floatX{from{transform:translateX(-45%)}to{transform:translateX(150%)}}
+.cloudbob{animation:bob 5s ease-in-out infinite}
+
+/* 雨 */
+.drop{position:absolute;top:-12%;width:2px;border-radius:2px;
+  background:linear-gradient(transparent,rgba(255,255,255,.9));animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(420px)}}
+
+/* 雪 */
+.flake{position:absolute;top:-10%;color:#fff;opacity:.9;animation:snowfall linear infinite;text-shadow:0 0 4px rgba(255,255,255,.8)}
+@keyframes snowfall{0%{transform:translate(0,-10px) rotate(0)}50%{transform:translate(14px,190px) rotate(180deg)}100%{transform:translate(-6px,390px) rotate(360deg)}}
+
+/* 雷 */
+.boltflash{position:absolute;inset:0;background:rgba(255,255,255,0);animation:flash 6.4s infinite}
+@keyframes flash{0%,90%,100%{background:rgba(255,255,255,0)}91%{background:rgba(255,255,255,.5)}92%{background:rgba(255,255,255,0)}94%{background:rgba(255,255,255,.38)}95.5%{background:rgba(255,255,255,0)}}
+.bolt-svg{position:absolute;top:16%;left:52%;width:64px;height:110px;opacity:0;filter:drop-shadow(0 0 8px #fff) drop-shadow(0 0 18px #bcd4ff);animation:zap 6.4s infinite}
+@keyframes zap{0%,90%,100%{opacity:0;transform:scale(1)}91%,94%{opacity:1;transform:scale(1.06)}92%,95%{opacity:.2}}
+
+/* 雾 */
+.fogband{position:absolute;left:-30%;width:160%;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.5);filter:blur(9px);animation:fogmove ease-in-out infinite alternate}
+@keyframes fogmove{from{transform:translateX(-14%)}to{transform:translateX(14%)}}
+
+/* 夜晚：月亮 + 星星 + 流星 */
+.moon{position:absolute;top:-18px;right:-8px;width:88px;height:88px;border-radius:50% 46% 52% 48%;
+  background:radial-gradient(circle at 35% 35%,#fff,#e5e9ff 60%,#bcc4ea);
+  box-shadow:0 0 40px 8px rgba(205,215,255,.5),inset -14px -10px 0 -4px rgba(130,140,200,.35);
+  animation:sunPulse 7s ease-in-out infinite}
+.moon .crater{position:absolute;background:rgba(150,158,205,.35);border-radius:50%}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;animation:twinkle ease-in-out infinite;box-shadow:0 0 5px rgba(255,255,255,.9)}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.35)}}
+.shoot{position:absolute;top:14%;left:70%;width:74px;height:2px;border-radius:2px;transform:rotate(24deg);
+  background:linear-gradient(90deg,rgba(255,255,255,.95),transparent);opacity:0;animation:shoot 7.5s ease-in infinite}
+@keyframes shoot{0%,76%,100%{opacity:0;transform:translate(0,0) rotate(24deg)}78%{opacity:1}92%{opacity:0;transform:translate(-150px,66px) rotate(24deg)}}
+
+/* 底部压暗 sheen（卡片内文字可读性） */
+.sheen{position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(18,28,55,.32) 100%)}
+.sky-fog~.content,.sky-snow~.content{}
+.sky-snow .flake{color:#fff}
+
+/* 涟漪水波纹 */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);
+  transform:scale(0);animation:rip .65s ease-out;pointer-events:none;z-index:5}
+.ripple.dark{background:rgba(52,67,94,.25)}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+
+/* ================================================================
+   详情页（H5 风格）
+   ================================================================ */
+#view-detail{position:fixed;inset:0;z-index:50;overflow-y:auto;display:none;background:#232c54}
+#view-detail.open{display:block;animation:viewIn .4s ease}
+@keyframes viewIn{from{opacity:0}to{opacity:1}}
+.detail-scene{position:fixed;inset:0;z-index:0;overflow:hidden}
+.detail-scene .scene{position:absolute;inset:0}
+.detail-inner{position:relative;z-index:2;max-width:780px;margin:0 auto;padding:0 22px 80px}
+.detail-topbar{
+  position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:18px 4px;margin-bottom:10px;
+}
+.back-btn{
+  border:none;cursor:pointer;color:#fff;font-family:'ZCOOL KuaiLe',cursive;font-size:15px;
+  padding:11px 22px;border-radius:999px;background:rgba(255,255,255,.18);
+  backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35),var(--shadow-soft);
+  transition:transform .25s,background .25s;position:relative;overflow:hidden;
+}
+.back-btn:hover{transform:translateX(-4px);background:rgba(255,255,255,.3)}
+.detail-chapter{font-family:'Baloo 2',sans-serif;font-size:13px;letter-spacing:2px;color:rgba(255,255,255,.85);
+  padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28)}
+.detail-hero{text-align:center;color:#fff;padding:52px 10px 20px;text-shadow:0 3px 14px rgba(15,25,55,.5)}
+.detail-emoji{font-size:64px;display:inline-block;animation:heroFloat 4s ease-in-out infinite;filter:drop-shadow(0 8px 14px rgba(10,20,50,.4))}
+@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.detail-title{font-family:'ZCOOL KuaiLe',cursive;font-size:clamp(34px,7vw,52px);font-weight:400;margin-top:18px;line-height:1.15}
+.detail-en{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(16px,3vw,21px);opacity:.92;margin-top:10px}
+.detail-year{
+  display:inline-block;margin-top:18px;font-family:'Baloo 2',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:3px;
+  padding:7px 20px;border-radius:999px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);
+}
+.glass{
+  background:rgba(255,255,255,.16);backdrop-filter:blur(12px);
+  border-radius:22px;box-shadow:var(--shadow-soft),inset 0 0 0 1.5px rgba(255,255,255,.25);
+  color:#fff;
+}
+.detail-body{padding:26px clamp(18px,4vw,34px) 30px;margin-top:26px;animation:riseIn .6s .1s cubic-bezier(.2,.8,.3,1) both}
+@keyframes riseIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.d-label{font-family:'Baloo 2','ZCOOL KuaiLe',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.9);
+  display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.d-label::after{content:'';flex:1;height:1.5px;background:linear-gradient(90deg,rgba(255,255,255,.4),transparent)}
+.story-p{
+  font-family:'ZCOOL KuaiLe','Quicksand',cursive;font-size:15.5px;line-height:2.05;margin-bottom:14px;
+  padding-left:20px;position:relative;color:rgba(255,255,255,.95);font-weight:400;
+}
+.story-p::before{content:'✿';position:absolute;left:0;top:2px;font-size:12px;color:rgba(255,255,255,.65)}
+.ach-list{list-style:none;display:grid;gap:12px;margin-top:4px}
+.ach-list li{
+  display:flex;align-items:flex-start;gap:12px;font-family:'ZCOOL KuaiLe',cursive;font-size:15px;line-height:1.75;
+}
+.ach-list .ach-check{
+  flex:none;width:24px;height:24px;margin-top:2px;border-radius:50% 44% 52% 46%;
+  background:rgba(255,255,255,.28);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45);
+  display:flex;align-items:center;justify-content:center;font-size:12px;animation:badgeWobble 4.5s ease-in-out infinite;
+}
+.d-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.d-stat{text-align:center;padding:18px 8px 15px;animation:riseIn .6s .25s both}
+.d-stat .v{font-family:'Baloo 2',sans-serif;font-size:clamp(20px,4vw,30px);font-weight:700;line-height:1.1}
+.d-stat .l{font-size:12px;opacity:.85;margin-top:7px;font-family:'ZCOOL KuaiLe',cursive;letter-spacing:1px}
+.detail-nav{display:flex;justify-content:space-between;gap:14px;margin-top:30px}
+.nav-btn{
+  flex:1;border:none;cursor:pointer;color:#fff;font-family:'ZCOOL KuaiLe',cursive;font-size:15px;
+  padding:16px 12px;border-radius:18px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28),var(--shadow-soft);transition:transform .25s,background .25s;
+  position:relative;overflow:hidden;
+}
+.nav-btn:hover:not(:disabled){transform:translateY(-4px);background:rgba(255,255,255,.28)}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.detail-foot-note{text-align:center;color:rgba(255,255,255,.6);font-size:12px;margin-top:34px;font-family:'Baloo 2','ZCOOL KuaiLe',sans-serif;letter-spacing:2px}
+
+/* ===== 响应式：移动端单列 ===== */
+@media(max-width:600px){
+  .grid,.comp-grid{grid-template-columns:1fr}
+  .livebar{flex-direction:column;align-items:stretch;max-width:560px;margin-left:auto;margin-right:auto}
+  .pill{justify-content:center}
+  header.site{padding-top:38px}
+  .d-stats{grid-template-columns:1fr;gap:10px}
+  .detail-nav{flex-direction:column}
+  .search-hint{padding:0 30px}
+  .sec-head{margin-top:30px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<!-- 背景漂浮装饰 -->
+<div class="bg-deco" aria-hidden="true">
+  <svg class="cloud" width="170" height="74" viewBox="0 0 160 70"><g fill="#ffffff"><ellipse cx="50" cy="45" rx="46" ry="24"/><ellipse cx="90" cy="38" rx="40" ry="30"/><ellipse cx="120" cy="48" rx="34" ry="20"/></g></svg>
+  <svg class="cloud" width="170" height="74" viewBox="0 0 160 70"><g fill="#ffffff"><ellipse cx="50" cy="45" rx="46" ry="24"/><ellipse cx="90" cy="38" rx="40" ry="30"/><ellipse cx="120" cy="48" rx="34" ry="20"/></g></svg>
+  <svg class="cloud" width="170" height="74" viewBox="0 0 160 70"><g fill="#ffffff"><ellipse cx="50" cy="45" rx="46" ry="24"/><ellipse cx="90" cy="38" rx="40" ry="30"/><ellipse cx="120" cy="48" rx="34" ry="20"/></g></svg>
+  <svg class="sparkle" style="top:18%;left:8%" width="20" height="20" viewBox="0 0 20 20"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" fill="#ffd9a8"/></svg>
+  <svg class="sparkle" style="top:46%;right:6%;animation-delay:1.2s" width="15" height="15" viewBox="0 0 20 20"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" fill="#ffc4d6"/></svg>
+  <svg class="sparkle" style="top:72%;left:12%;animation-delay:2.2s" width="12" height="12" viewBox="0 0 20 20"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" fill="#b7dcff"/></svg>
+  <svg class="sparkle" style="top:8%;right:16%;animation-delay:.6s" width="14" height="14" viewBox="0 0 20 20"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" fill="#e6d7ff"/></svg>
+</div>
+
+<!-- ============ 主视图 ============ -->
+<div id="view-home">
+  <header class="site">
+    <div class="hello-tag">✿ 一本会下雨的成长手账 ✿</div>
+    <h1 class="logo">Hello everyone<span class="dot">.</span></h1>
+    <svg class="squiggle" viewBox="0 0 190 14" aria-hidden="true"><path d="M4 8 Q 20 2, 38 8 T 72 8 T 106 8 T 140 8 T 174 8" fill="none" stroke="#ffb56b" stroke-width="3.5" stroke-linecap="round" opacity=".85"/></svg>
+    <div class="sub">Dlut</div>
+    <div class="sub-cn">大连理工大学盘锦校区 · 成长手账</div>
+    <div class="date-line" id="dateLine">—</div>
+  </header>
+
+  <!-- 真实 API 实时条 -->
+  <div class="livebar">
+    <button class="pill" id="weatherPill" title="点击刷新 · 数据来自 Open-Meteo">
+      <span class="p-ico" id="wIcon">⛅</span>
+      <span id="wText">正在联络盘锦的天空…</span>
+      <span class="p-refresh">↻ 刷新</span>
+    </button>
+    <button class="pill" id="quotePill" title="点击换一句 · 来自一言 API">
+      <span class="p-ico">🎐</span>
+      <span id="quoteText">正在抄录今日份诗意…</span>
+      <span class="p-from" id="quoteFrom"></span>
+    </button>
+  </div>
+
+  <div class="wrap">
+    <!-- 竞赛搜索 -->
+    <div class="searchbar">
+      <div class="searchbox" id="searchbox">
+        <input type="text" id="searchInput" placeholder="搜索竞赛加入我的竞赛之城，如：数模 / 蓝桥 / RoboMaster…" autocomplete="off" aria-label="搜索竞赛">
+        <span class="s-ico">🔍</span>
+        <div class="suggest" id="suggest" role="listbox"></div>
+      </div>
+    </div>
+    <p class="search-hint">收录 30 项教育部认定学科竞赛 · 输入关键词实时联想 · 点击或回车加入 ✦</p>
+
+    <!-- 成长之城 -->
+    <div class="sec-head">
+      <h2 class="sec-title">☁ 成长之城</h2>
+      <span class="sec-en">My Growth Chapters</span>
+      <span class="sec-count" id="growthCount">6 章</span>
+    </div>
+    <div class="grid" id="growthGrid"></div>
+
+    <!-- 竞赛之城 -->
+    <div class="sec-head">
+      <h2 class="sec-title">🚩 竞赛之城</h2>
+      <span class="sec-en">Competition Guide</span>
+      <span class="sec-count" id="compCount">—</span>
+    </div>
+    <div class="grid comp-grid" id="compGrid"></div>
+  </div>
+
+  <footer>
+    © 2026 Hello everyone · Dlut — 手绘于盘锦的天空下，献给每一段天气不同的日子 <span class="f-heart">♥</span><br>
+    天气数据 Open-Meteo · 每日语句 一言 API · 竞赛目录源自教育部认定全国普通高校大学生竞赛（84 项）
+  </footer>
+</div>
+
+<!-- ============ 详情视图（H5 风格） ============ -->
+<div id="view-detail" aria-hidden="true">
+  <div class="detail-scene" id="detailScene"></div>
+  <div class="detail-inner">
+    <div class="detail-topbar">
+      <button class="back-btn" id="backBtn">← 返回主页</button>
+      <span class="detail-chapter" id="detailChapter">CHAPTER 1 / 6</span>
+    </div>
+    <div class="detail-hero" id="detailHero"></div>
+    <div class="glass detail-body">
+      <div class="d-label">✎ 这一章的故事</div>
+      <div id="detailStory"></div>
+    </div>
+    <div class="glass detail-body" style="margin-top:16px">
+      <div class="d-label">✔ 达成的成就</div>
+      <ul class="ach-list" id="detailAch"></ul>
+      <div class="d-stats" id="detailStats"></div>
+    </div>
+    <div class="detail-nav">
+      <button class="nav-btn" id="prevBtn">← 上一章</button>
+      <button class="nav-btn" id="nextBtn">下一章 →</button>
+    </div>
+    <div class="detail-foot-note">· HELLO EVERYONE · GROWING AT DLUT ·</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================================================================
+ * 数据层
+ * ================================================================ */
+
+/* 七种天气场景 */
+const SCENES = {
+  clear:{zh:"晴朗",en:"Sunny",sky:"sky-clear",icon:"☀"},
+  cloudy:{zh:"多云",en:"Cloudy",sky:"sky-cloudy",icon:"⛅"},
+  rain:{zh:"小雨",en:"Drizzle",sky:"sky-rain",icon:"🌧"},
+  snow:{zh:"飘雪",en:"Snowy",sky:"sky-snow",icon:"❄"},
+  storm:{zh:"雷阵雨",en:"Thunderstorm",sky:"sky-storm",icon:"⛈"},
+  fog:{zh:"薄雾",en:"Misty",sky:"sky-fog",icon:"🌫"},
+  night:{zh:"晴夜",en:"Starry Night",sky:"sky-night",icon:"🌙"}
+};
+const SCENE_ORDER = ["clear","cloudy","rain","snow","storm","fog","night"];
+
+/* 成长经历（默认 6 张卡） */
+const GROWTH = [
+  {
+    id:"dawn", scene:"clear", emoji:"🎒",
+    title:"初见盘锦", en:"First Sight of the Red Beach", year:"2025 · SEP",
+    desc:"拖着两个行李箱来到辽河之畔，盘锦用一整片红海滩迎接了我。",
+    story:[
+      "2025 年的九月，我拖着行李走进大工盘锦校区。这里离海不远，空气里有湿地芦苇的清甜味道。",
+      "报到那天阳光很好。学长说，这座城市把最美的海岸铺成了红毯——碱蓬草染红整片滩涂，丹顶鹤偶尔从芦苇荡上空掠过。主楼前拍下第一张照片，发给爸妈：我到啦。",
+      "傍晚和新同学绕着校园走了一圈，风从辽河口的方向吹来，温柔又辽阔。我对这座安静的小城说：接下来四年，请多关照。"
+    ],
+    ach:["顺利报到，正式成为 DLUT 盘锦校区的一员","加入院学生会宣传部，学会第一套排版工具","班级第一次团建，在红海滩看到了丹顶鹤"],
+    stats:[["1","座湿地之城"],["2","只行李箱"],["∞","份期待"]]
+  },
+  {
+    id:"study", scene:"cloudy", emoji:"📚",
+    title:"学业深耕", en:"Digging Deep, Slowly", year:"大一学年",
+    desc:"在令希图书馆的清晨与闭馆音乐之间，把迷茫熬成了方法。",
+    story:[
+      "高数和线代像两座云雾缭绕的山，第一学期我常常在山脚打转。后来发现，山没有捷径，只有一步一步的等高线。",
+      "开始泡校区图书馆：早上七点靠窗的老位置，晚上闭馆音乐响起才收拾书包。笔记写满了一本又一本，错题本厚得像字典。",
+      "绩点从山脚慢慢爬坡。原来所谓天赋，很多时候只是把「再看一遍」重复了足够多遍。"
+    ],
+    ach:["学年 GPA 3.8+，专业排名前 10%","获得校级奖学金","用 Python 写出第一个能跑的数据分析小项目"],
+    stats:[["40+","门修读课程"],["3.8+","GPA"],["300h","图书馆时长"]]
+  },
+  {
+    id:"contest", scene:"storm", emoji:"⚡",
+    title:"竞赛征途", en:"Chasing the Storm", year:"大二上 · 进行中",
+    desc:"数模国赛三天三夜，闪电一样的灵感总在深夜两点劈下来。",
+    story:[
+      "第一次参加全国大学生数学建模竞赛，抽到能源储能调度方向的题目。三天三夜，宿舍楼的灯为我们这支队伍亮到最后一秒。",
+      "第一天建模型，第二天跑代码，第三天写论文。凌晨两点，程序终于收敛的那一刻，我们在实验室里压着嗓子欢呼。",
+      "比赛教会我的不只是算法，还有：怎么在信息不全时做决策，怎么把想法讲给别人听，以及——咖啡其实没有想象中管用，热爱才管用。"
+    ],
+    ach:["全国大学生数学建模竞赛 · 省一等奖，冲击国奖中","蓝桥杯程序设计大赛 · 省级奖项","校「卓越杯」数学建模一等奖"],
+    stats:[["72h","国赛连续作战"],["2","支并肩队伍"],["1","个国奖梦想"]]
+  },
+  {
+    id:"practice", scene:"rain", emoji:"🌾",
+    title:"实践磨砺", en:"Notes from the Field", year:"每个假期",
+    desc:"社会实践的雨天里，伞下的问卷比伞上的雨点更密。",
+    story:[
+      "第一个暑假跟着队伍去做社会调研。社区、集市、田间地头，问卷一份份发出去，故事一条条收回来。",
+      "做志愿服务时认识了很多人：支教课堂上举手的小朋友，社区里独居的爷爷奶奶。他们教我的，比我教他们的多。",
+      "学生工作也没落下：策划、海报、搬桌子、写总结。琐碎的事情里藏着真实的成长——把一件小事完整地做好，就是本事。"
+    ],
+    ach:["社会实践优秀个人","累计志愿服务时长 100+ 小时","主笔完成一份社区调研报告并被采纳"],
+    stats:[["100+","志愿时长(h)"],["3","次社会实践"],["1","份调研报告"]]
+  },
+  {
+    id:"winter", scene:"snow", emoji:"🧣",
+    title:"冬日坚守", en:"Snowy Winter Days", year:"每年 12 月",
+    desc:"大连的雪落进早八的清晨，落成期末周里一页页翻过的书。",
+    story:[
+      "盘锦的冬天来得认真，雪一场接一场。早八的路上，呼出的白气和 coffee 的热气在围巾上方会师。",
+      "期末周的图书馆一座难求。翻书声、键盘声、偶尔的翻身叹气声，是冬天最励志的白噪音。",
+      "跨年夜和室友在操场看烟花，零下的温度，滚烫的年纪。新年的第一个愿望是：所有努力都不被辜负。"
+    ],
+    ach:["大学英语四级 600+","期末季全科通过，无一挂科","学院跨年晚会登台表演节目"],
+    stats:[["-10°C","清晨的坚持"],["6","门期末连考"],["1","杯冬日热奶茶"]]
+  },
+  {
+    id:"dream", scene:"night", emoji:"🌙",
+    title:"星夜远航", en:"Sailing Toward Stars", year:"未来 · 进行时",
+    desc:"操场夜谈时把梦想说给星空听，星星没说话，就是默认了。",
+    story:[
+      "晚上绕着操场散步，和好朋友聊未来：读研还是就业，去南方看海还是留在北方等雪。没有标准答案，但聊完总觉得很笃定。",
+      "我想成为那种人：手里有技术，心里有热爱，遇到难题时眼睛会发光。竞赛、绩点、项目，都是通往那里的等高线。",
+      "这一章还在继续书写。下次更新时，希望带回来的，是一个国奖，和更好的自己。"
+    ],
+    ach:["个人成长手账持续更新中…","保研/深造目标已锁定","保持热爱，保持发光"],
+    stats:[["∞","种可能"],["1","个方向"],["0","次退缩"]]
+  }
+];
+
+/* 竞赛库：30 项，全部属于教育部认定的 84 项全国普通高校大学生竞赛 */
+const COMPS = [
+  {id:"cy",       zh:"中国国际大学生创新创业大赛（原“互联网+”）", cat:"创新创业", emoji:"💡", month:"4月",  url:"https://cy.ncss.cn/", keys:"互联网+ 互联网创新 大学生创新 大创 赛 国创"},
+  {id:"tiaozhan", zh:"“挑战杯”全国大学生课外学术科技作品竞赛",       cat:"创新创业", emoji:"💡", month:"奇数年2月", url:"https://www.tiaozhanbei.net/", keys:"挑战杯 课外学术 科技作品"},
+  {id:"sanchuang",zh:"全国大学生电子商务“三创赛”",                   cat:"创新创业", emoji:"💡", month:"12月", url:"https://www.3chuang.net/", keys:"三创 电子商务 电商 创新创意创业"},
+  {id:"diaocha",  zh:"全国大学生市场调查与分析大赛",                 cat:"创新创业", emoji:"💡", month:"10月", url:"http://www.china-cssc.org/", keys:"市调 市场调查 正大杯 统计 调研"},
+  {id:"wuliu",    zh:"全国大学生物流设计大赛",                       cat:"创新创业", emoji:"💡", month:"11月", url:"https://wlsjds.clpp.org.cn/", keys:"物流 供应链 物流设计"},
+  {id:"jieneng",  zh:"全国大学生节能减排社会实践与科技竞赛",         cat:"创新创业", emoji:"💡", month:"3月",  url:"https://www.jienengjianpai.org/", keys:"节能减排 能源 低碳 大工能动杯 双碳"},
+  {id:"cumm",     zh:"全国大学生数学建模竞赛",                       cat:"数学建模", emoji:"📐", month:"5月",  url:"https://www.mcm.edu.cn/", keys:"数模 数学建模 cumcm 国赛 建模"},
+  {id:"chengtu",  zh:"全国大学生先进成图技术与产品信息建模创新大赛", cat:"数学建模", emoji:"📐", month:"4月",  url:"http://www.chengtudasai.com/", keys:"成图 制图 图学 建模 高教杯"},
+  {id:"acm",      zh:"ACM-ICPC 国际大学生程序设计竞赛",              cat:"编程开发", emoji:"💻", month:"4月",  url:"https://icpc.global/", keys:"acm icpc 程序设计 算法 区域赛"},
+  {id:"lanqiao",  zh:"蓝桥杯全国软件和信息技术专业人才大赛",         cat:"编程开发", emoji:"💻", month:"12月", url:"https://dasai.lanqiao.cn/", keys:"蓝桥 蓝桥杯 程序 软件 java c++"},
+  {id:"jsjds",    zh:"中国大学生计算机设计大赛",                     cat:"编程开发", emoji:"💻", month:"3月",  url:"http://jsjds.blcu.edu.cn/", keys:"计算机设计 4c 计设 多媒体 软件"},
+  {id:"c4",       zh:"中国高校计算机大赛（天梯赛 / 大数据挑战赛等）",cat:"编程开发", emoji:"💻", month:"3-6月", url:"http://www.c4best.cn/", keys:"高校计算机 天梯赛 团体程序设计 大数据 移动应用 网络技术 人工智能创意赛"},
+  {id:"ciscn",    zh:"全国大学生信息安全竞赛",                       cat:"编程开发", emoji:"💻", month:"4月",  url:"https://www.ciscn.org/", keys:"信息安全 ctf 网络安全 ciscn 攻防"},
+  {id:"ict",      zh:"华为 ICT 大赛",                                cat:"编程开发", emoji:"💻", month:"9月",  url:"https://e.huawei.com/cn/talent/ict-academy/#/ict-contest", keys:"华为 ict 网络 云 昇腾 鲲鹏 实践赛"},
+  {id:"astar",    zh:"百度之星·程序设计大赛",                        cat:"编程开发", emoji:"💻", month:"6月",  url:"https://star.baidu.com/", keys:"百度之星 百度 程序设计 astar"},
+  {id:"educg",    zh:"全国大学生计算机系统能力大赛",                 cat:"编程开发", emoji:"💻", month:"3月",  url:"https://compiler.educg.net/", keys:"系统能力 操作系统 编译 数据库 cpu 龙芯杯 os"},
+  {id:"iot",      zh:"全国大学生物联网设计竞赛",                     cat:"编程开发", emoji:"💻", month:"4月",  url:"https://iot.sjtu.edu.cn/", keys:"物联网 iot 华为杯 智能硬件 传感"},
+  {id:"ciciec",   zh:"全国大学生集成电路创新创业大赛",               cat:"编程开发", emoji:"💻", month:"5月",  url:"http://univ.ciciec.com/", keys:"集成电路 芯片 ic 集创赛 soc 半导体"},
+  {id:"nuedc",    zh:"全国大学生电子设计竞赛",                       cat:"电子通信", emoji:"⚡", month:"4月",  url:"http://www.nuedcchina.com/", keys:"电赛 电子设计 嵌入式 硬件 模电"},
+  {id:"smartcar", zh:"全国大学生智能汽车竞赛",                       cat:"电子通信", emoji:"⚡", month:"4月",  url:"https://smartcar.cdstm.cn/", keys:"智能车 智能汽车 循迹 摄像头 飞思卡尔"},
+  {id:"robomaster",zh:"全国大学生机器人大赛 RoboMaster",             cat:"机器人",   emoji:"🤖", month:"10月", url:"https://www.robomaster.com/", keys:"robomaster rm 机甲大师 大疆 机器人 战队"},
+  {id:"raicom",   zh:"睿抗机器人开发者大赛（RAICOM）",               cat:"机器人",   emoji:"🤖", month:"10月", url:"https://www.raicom.com.cn/", keys:"睿抗 raicom 机器人 开发者"},
+  {id:"siemens",  zh:"“西门子杯”中国智能制造挑战赛",                 cat:"机器人",   emoji:"🤖", month:"3月",  url:"https://www.siemenscup-cimc.org.cn/", keys:"西门子 智能制造 自动化 plc 工业"},
+  {id:"gcxl",     zh:"中国大学生工程实践与创新能力大赛",             cat:"工程制造", emoji:"🔧", month:"4-5月", url:"http://www.gcxl.edu.cn/", keys:"工创赛 工程实践 工程训练 创新 能力大赛"},
+  {id:"umic",     zh:"全国大学生机械创新设计大赛",                   cat:"工程制造", emoji:"🔧", month:"3-4月", url:"https://umic.moocollege.com/", keys:"机械创新 机械设计 机械 机构"},
+  {id:"structure",zh:"全国大学生结构设计竞赛",                       cat:"工程制造", emoji:"🔧", month:"1月",  url:"https://www.structurecontest.com/", keys:"结构设计 结构 土木 桥梁 模型"},
+  {id:"ucc",      zh:"“外研社·国才杯”全国大学生英语系列赛",          cat:"外语演讲", emoji:"🗣", month:"5月",  url:"https://ucc.unipus.cn/", keys:"外研社 国才杯 英语 演讲 写作 阅读 辩论 uchallenge"},
+  {id:"sunada",   zh:"全国大学生广告艺术大赛",                       cat:"文化艺术", emoji:"🎨", month:"4月",  url:"https://www.sun-ada.net/", keys:"大广赛 广告 艺术 创意 平面 视频"},
+  {id:"ncda",     zh:"未来设计师·全国高校数字艺术设计大赛",          cat:"文化艺术", emoji:"🎨", month:"12月", url:"https://www.ncda.org.cn/", keys:"未来设计师 ncda 数字艺术 设计 视觉"},
+  {id:"culsc",    zh:"全国大学生生命科学竞赛（CULSC）",              cat:"生命科学", emoji:"🧬", month:"2月",  url:"https://www.culsc.com/", keys:"生命科学 生物 实验 culsc 科研"}
+];
+
+/* 拼音/缩写索引：让 s→数模、lq→蓝桥、rm→RoboMaster 这类搜索成立 */
+const PY = {
+  cy:"hlw hulianwang cxcy chuangxin chuangye 互联网 创业 创新",
+  tiaozhan:"tzb tiaozhanbei kw kewai xueshu 课外 学术",
+  sanchuang:"sc scs ds dsw dianzishangwu 三创 电商 电子商务",
+  diaocha:"sd scdc shichangdiaocha 市调 市场调查 zb zhengda 正大",
+  wuliu:"wl wlsj 物流 gyl gongyinglian 供应链",
+  jieneng:"jnjp ny nengyuan dt st shuangtan 节能减排 能源 低碳 双碳",
+  cumm:"sm sxjm shuxuejianmo jm jianmo 数模 数学建模 建模",
+  chengtu:"ct xjct tx tuxue zt zhitu 成图 图学 制图",
+  acm:"acm icpc cx chengxusheji sf suanfa 程序设计 算法",
+  lanqiao:"lq lqb rj ruanjian 蓝桥 蓝桥杯 软件",
+  jsjds:"jsjsj jisuanjisheji 4c 计算机设计",
+  c4:"gxjsj tt tianti dsj dashuju ai 高校计算机 天梯 大数据",
+  ciscn:"xxaq xinxianquan ctf wl wangluo 信息安全 网络",
+  ict:"ict hw huawei 华为",
+  astar:"bdzx bd baidu 百度之星 百度",
+  educg:"xtnl os by bianyi cpu sj shujuku 系统能力 操作系统 编译 数据库",
+  iot:"iot wlw hwb 物联网 华为杯",
+  ciciec:"jcdl xp xinpian jcs soc 集成电路 芯片 集创赛",
+  nuedc:"ds dzsj qrs 电赛 电子设计 嵌入式",
+  smartcar:"znqc xj 智能汽车 循迹",
+  robomaster:"rm jqr dj dajiang 机器人 机甲 大疆",
+  raicom:"raicom rk jqr 睿抗 机器人",
+  siemens:"xmz znzz zdh plc 西门子 智能制造 自动化",
+  gcxl:"gc gcs gcsj 工创 工创赛 工程实践",
+  umic:"jxcx jx jxsj 机械创新 机械 机械设计",
+  structure:"jgsj tm ql 结构设计 土木 桥梁",
+  ucc:"wys gcb yy yingyu yj xz yd 外研社 国才杯 英语 演讲 写作 阅读",
+  sunada:"dgs gg ys 大广赛 广告 艺术",
+  ncda:"ncda wlsjs szys sj 未来设计师 数字艺术 设计",
+  culsc:"smkx sw 生命科学 生物 culsc"
+};
+COMPS.forEach(c=>c.py=(PY[c.id]||""));
+
+/* 状态（数据驱动渲染） */
+const DEFAULT_GROWTH_IDS = GROWTH.map(g=>g.id);
+const DEFAULT_COMP_IDS = ["cy","tiaozhan","cumm","lanqiao","acm","jsjds","c4","ciscn","ict","robomaster","nuedc","smartcar","raicom","siemens","gcxl","umic","structure","jieneng","sunada","ncda"];
+const state = {
+  growth: GROWTH.filter(g=>DEFAULT_GROWTH_IDS.includes(g.id)),
+  comps:  DEFAULT_COMP_IDS.map(id=>COMPS.find(c=>c.id===id))
+};
+let prevGrowthIds = null, prevCompIds = null; // 用于“仅新卡片播放入场动画”
+
+/* ================================================================
+ * 场景生成（CSS + JS，种子随机保证重绘稳定）
+ * ================================================================ */
+function hashSeed(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+function puffCloud(rand){
+  const j = n=>Math.round(n+rand()*4);
+  return `<span class="puff" style="width:${j(44)}px;height:${j(44)}px;left:0;top:10px"></span>`+
+         `<span class="puff" style="width:${j(58)}px;height:${j(58)}px;left:${j(24)}px;top:0"></span>`+
+         `<span class="puff" style="width:${j(44)}px;height:${j(44)}px;left:${j(58)}px;top:12px"></span>`+
+         `<span class="puff flat" style="width:${j(86)}px;height:${j(28)}px;left:6px;top:${j(32)}px"></span>`;
+}
+/* 云朵分区错相漂移：横向分带起始位 + 纵向分带高度 + 各自不同周期/延迟 */
+function cloudGroup(n,opacity,rand){
+  let s="";
+  const bandTop=4, bandH=Math.max((58-bandTop)/n,8);
+  for(let i=0;i<n;i++){
+    const top = bandTop + i*bandH + rand()*bandH*0.5;
+    const startX = ((i + .12 + rand()*.76) / n) * 118 - 9;   /* 起始横向错开，避免堆叠 */
+    const scale = .5 + rand()*.42;
+    const dur = 34 + rand()*36;
+    const delay = -(dur * (i/n) - rand()*dur*0.55);          /* 负延迟错相 */
+    const op = opacity*(.72+rand()*.28);
+    const bobDur = (3.6+rand()*3).toFixed(1);
+    s+=`<div class="cloudgrp" style="top:${top.toFixed(1)}%;left:${startX.toFixed(1)}%;transform:scale(${scale.toFixed(2)});opacity:${op.toFixed(2)};animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s">`+
+       `<div class="cloudbob" style="animation-duration:${bobDur}s">${puffCloud(rand)}</div></div>`;
+  }
+  return s;
+}
+function rainLayer(n,rand){
+  let s="";
+  for(let i=0;i<n;i++){
+    const left=(rand()*100).toFixed(1), h=(10+rand()*14).toFixed(0),
+          dur=(.5+rand()*.7).toFixed(2), delay=('-'+(rand()*1.2).toFixed(2)),
+          op=(.4+rand()*.5).toFixed(2);
+    s+=`<div class="drop" style="left:${left}%;height:${h}px;animation-duration:${dur}s;animation-delay:${delay}s;opacity:${op}"></div>`;
+  }
+  return s;
+}
+function snowLayer(n,rand){
+  let s="";
+  for(let i=0;i<n;i++){
+    const ch = rand()<.55?"❄":"●", left=(rand()*100).toFixed(1),
+          fs=(ch==="❄"?8+rand()*11:3+rand()*3).toFixed(0),
+          dur=(4+rand()*6).toFixed(1), delay=('-'+(rand()*8).toFixed(1)),
+          op=(.5+rand()*.5).toFixed(2);
+    s+=`<div class="flake" style="left:${left}%;font-size:${fs}px;animation-duration:${dur}s;animation-delay:${delay}s;opacity:${op}">${ch}</div>`;
+  }
+  return s;
+}
+function starLayer(n,rand){
+  let s="";
+  for(let i=0;i<n;i++){
+    const left=(2+rand()*96).toFixed(1), top=(2+rand()*72).toFixed(1),
+          dur=(1.5+rand()*3).toFixed(1), delay=('-'+(rand()*4).toFixed(1)),
+          sz=(rand()<.2?4:2.5).toFixed(1);
+    s+=`<div class="star" style="left:${left}%;top:${top}%;width:${sz}px;height:${sz}px;animation-duration:${dur}s;animation-delay:${delay}s"></div>`;
+  }
+  return s;
+}
+function buildScene(type,seedStr,density=1){
+  const rand = mulberry32(hashSeed(seedStr));
+  let inner="";
+  if(type==="clear"){
+    inner+=`<div class="sunrays">${Array.from({length:12},(_,i)=>`<div class="ray" style="transform:rotate(${i*30}deg)"></div>`).join("")}</div>`;
+    inner+=`<div class="sun"><div class="sunface"></div></div>`;
+    inner+=cloudGroup(2,.6,rand);
+  }else if(type==="cloudy"){
+    inner+=`<div class="sun" style="opacity:.45;width:80px;height:80px;top:-10px;right:16px;box-shadow:0 0 26px 6px rgba(255,210,90,.3)"><div class="sunface"></div></div>`;
+    inner+=cloudGroup(Math.round(3*density)+1,1,rand);
+  }else if(type==="rain"){
+    inner+=cloudGroup(3,1,rand);
+    inner+=rainLayer(Math.round(32*density),rand);
+  }else if(type==="snow"){
+    inner+=cloudGroup(2,.85,rand);
+    inner+=snowLayer(Math.round(24*density),rand);
+  }else if(type==="storm"){
+    inner+=cloudGroup(3,1,rand);
+    inner+=rainLayer(Math.round(38*density),rand);
+    inner+=`<svg class="bolt-svg" viewBox="0 0 64 110"><polyline points="38,2 24,36 34,38 18,72 46,40 34,38 48,4" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>`;
+    inner+=`<div class="boltflash"></div>`;
+  }else if(type==="fog"){
+    inner+=`<div class="sun" style="opacity:.4;width:76px;height:76px;top:6px;right:18px;box-shadow:0 0 22px 5px rgba(255,235,190,.4)"></div>`;
+    inner+=cloudGroup(2,.5,rand);
+    const bands=Math.round(5*density);
+    for(let i=0;i<bands;i++){
+      inner+=`<div class="fogband" style="top:${18+i*15}%;height:${34+i*6}px;animation-duration:${(7+i*2.6).toFixed(1)}s;opacity:${(.6-i*.07).toFixed(2)}"></div>`;
+    }
+  }else if(type==="night"){
+    inner+=`<div class="moon"><span class="crater" style="width:12px;height:12px;top:26%;left:24%"></span><span class="crater" style="width:8px;height:8px;top:48%;left:52%"></span><span class="crater" style="width:6px;height:6px;top:32%;left:62%"></span></div>`;
+    inner+=starLayer(Math.round(30*density),rand);
+    inner+=`<div class="shoot"></div>`;
+    inner+=cloudGroup(1,.35,rand);
+  }
+  inner+=`<div class="sheen"></div>`;
+  return `<div class="scene ${SCENES[type].sky}">${inner}</div>`;
+}
+
+/* ================================================================
+ * 渲染（render() 数据驱动）
+ * ================================================================ */
+const growthGrid=document.getElementById("growthGrid");
+const compGrid=document.getElementById("compGrid");
+
+function growthCardHTML(g,i,isNew){
+  const sc=SCENES[g.scene];
+  return `<article class="card ${isNew?'card-in':''}" data-id="${g.id}" style="${isNew?`animation-delay:${i*80}ms`:''}" tabindex="0" role="button" aria-label="${g.title} 详情">
+    <div class="tape"></div>
+    ${buildScene(g.scene,g.id)}
+    <div class="content">
+      <div class="top">
+        <div class="badge">${g.emoji}</div>
+        <button class="del" title="移除这张卡" aria-label="移除 ${g.title}">✕</button>
+      </div>
+      <div class="card-year">${g.year}</div>
+      <div class="card-title">${g.title}</div>
+      <div class="card-en">${g.en}</div>
+      <div class="spacer"></div>
+      <p class="card-desc">${g.desc}</p>
+      <div class="card-foot">
+        <span class="scene-tag">${sc.icon} ${sc.zh} · ${sc.en}</span>
+        <span class="go-detail">翻开这章 →</span>
+      </div>
+    </div>
+  </article>`;
+}
+function compCardHTML(c,i,isNew){
+  const scene=SCENE_ORDER[i%SCENE_ORDER.length];
+  const sc=SCENES[scene];
+  return `<article class="comp-card ${isNew?'card-in':''}" data-id="${c.id}" style="${isNew?`animation-delay:${i*70}ms`:''}" tabindex="0" role="button" aria-label="${c.zh}，点击访问官网">
+    ${buildScene(scene,c.id+"-comp")}
+    <div class="content">
+      <div class="top">
+        <span class="cat-tag">${c.emoji} ${c.cat}</span>
+        <button class="del" title="从我的竞赛之城移除" aria-label="移除 ${c.zh}">✕</button>
+      </div>
+      <h3 class="comp-name">${c.zh}</h3>
+      <div class="spacer"></div>
+      <div class="comp-foot">
+        <span class="comp-month">📅 ${c.month} 报名</span>
+        <span class="go-web">${sc.icon} 官网 ↗</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  /* 成长卡 */
+  if(state.growth.length===0){
+    growthGrid.innerHTML=`<div class="card empty-state" style="grid-column:1/-1">
+      <div class="e-ico">☁️</div><div class="e-t">成长之城的云都飘走了～</div>
+      <button class="reset-btn" id="resetGrowth">↻ 恢复全部成长章节</button></div>`;
+  }else{
+    growthGrid.innerHTML=state.growth.map((g,i)=>growthCardHTML(g,i,prevGrowthIds&&!prevGrowthIds.has(g.id))).join("");
+  }
+  document.getElementById("growthCount").textContent=`${state.growth.length} 章`;
+
+  /* 竞赛卡 */
+  if(state.comps.length===0){
+    compGrid.innerHTML=`<div class="card empty-state" style="grid-column:1/-1">
+      <div class="e-ico">🚩</div><div class="e-t">竞赛之城还空着，用上方搜索框加入第一场竞赛吧</div>
+      <button class="reset-btn" id="resetComps">↻ 恢复推荐竞赛</button></div>`;
+  }else{
+    compGrid.innerHTML=state.comps.map((c,i)=>compCardHTML(c,i,prevCompIds&&!prevCompIds.has(c.id))).join("");
+  }
+  document.getElementById("compCount").textContent=`已展示 ${state.comps.length} / ${COMPS.length} 项`;
+
+  /* 交互绑定 */
+  growthGrid.querySelectorAll(".card[data-id]").forEach(card=>{
+    const id=card.dataset.id;
+    card.querySelector(".del").addEventListener("click",e=>{
+      e.stopPropagation();
+      const g=state.growth.find(x=>x.id===id);
+      state.growth=state.growth.filter(x=>x.id!==id);
+      render(); toast(`已收起「${g.title}」☁`);
+    });
+    card.addEventListener("click",e=>{ rippleAt(card,e); const g=state.growth.find(x=>x.id===id); setTimeout(()=>openDetail(g),240); });
+    card.addEventListener("keydown",e=>{ if(e.key==="Enter") openDetail(state.growth.find(x=>x.id===id)); });
+  });
+  compGrid.querySelectorAll(".comp-card[data-id]").forEach(card=>{
+    const id=card.dataset.id;
+    card.querySelector(".del").addEventListener("click",e=>{
+      e.stopPropagation();
+      const c=state.comps.find(x=>x.id===id);
+      state.comps=state.comps.filter(x=>x.id!==id);
+      render(); toast(`已移除「${shortName(c.zh)}」`);
+    });
+    card.addEventListener("click",e=>{
+      rippleAt(card,e);
+      const c=COMPS.find(x=>x.id===id);
+      window.open(c.url,"_blank","noopener");   /* 同步调用，浏览器不拦截 */
+    });
+    card.addEventListener("keydown",e=>{ if(e.key==="Enter"){const c=COMPS.find(x=>x.id===id);window.open(c.url,"_blank","noopener");} });
+  });
+  const rg=document.getElementById("resetGrowth");
+  if(rg) rg.addEventListener("click",()=>{ state.growth=GROWTH.slice(); render(); toast("成长章节已全部恢复 ✦"); });
+  const rc=document.getElementById("resetComps");
+  if(rc) rc.addEventListener("click",()=>{ state.comps=DEFAULT_COMP_IDS.map(id=>COMPS.find(c=>c.id===id)); render(); toast("推荐竞赛已恢复 ✦"); });
+
+  /* 更新“旧卡片”集合（下次重绘不重播入场动画） */
+  prevGrowthIds=new Set(state.growth.map(g=>g.id));
+  prevCompIds=new Set(state.comps.map(c=>c.id));
+}
+function shortName(zh){ return zh.replace(/[（(].*?[)）]/g,"").replace(/[“”"]/g,"").slice(0,18); }
+
+/* 水波纹 */
+function rippleAt(el,e){
+  const r=document.createElement("span");
+  r.className="ripple"+(el.classList.contains("pill")?" dark":"");
+  const b=el.getBoundingClientRect(), size=Math.max(b.width,b.height)*0.35;
+  r.style.width=r.style.height=size+"px";
+  r.style.left=((e.clientX??b.left+b.width/2)-b.left-size/2)+"px";
+  r.style.top=((e.clientY??b.top+b.height/2)-b.top-size/2)+"px";
+  el.appendChild(r); setTimeout(()=>r.remove(),700);
+}
+
+/* ================================================================
+ * 搜索联想（最多 6 条，已展示不再出现）
+ * ================================================================ */
+const searchInput=document.getElementById("searchInput");
+const suggestBox=document.getElementById("suggest");
+let hlIdx=-1, hlList=[];
+
+function highlight(text,q){
+  const i=text.toLowerCase().indexOf(q);
+  if(i<0||!q) return text;
+  return text.slice(0,i)+"<b>"+text.slice(i,i+q.length)+"</b>"+text.slice(i+q.length);
+}
+/* 匹配打分：中文名 > 拼音缩写精确 > 拼音前缀 > 拼音包含 > 英文关键词 > 分类 */
+function scoreComp(c,q){
+  const zh=c.zh.toLowerCase();
+  if(zh.includes(q)) return 100;
+  const tokens=(c.py||"").toLowerCase().split(/\s+/);
+  if(tokens.includes(q)) return 92;
+  if(tokens.some(t=>t.startsWith(q))) return 85;
+  if((c.py||"").toLowerCase().includes(q)) return 65;
+  if((c.keys||"").toLowerCase().includes(q)) return 45;
+  if(c.cat.toLowerCase().includes(q)) return 25;
+  return 0;
+}
+function goToCompCard(id){
+  const card=compGrid.querySelector(`.comp-card[data-id="${id}"]`);
+  if(!card) return;
+  card.scrollIntoView({behavior:"smooth",block:"center"});
+  card.classList.add("flash");
+  setTimeout(()=>card.classList.remove("flash"),1300);
+  toast("它已经在你的竞赛之城啦 ✓");
+}
+function updateSuggest(){
+  const q=searchInput.value.trim().toLowerCase();
+  if(!q){ suggestBox.classList.remove("show"); hlIdx=-1; hlList=[]; return; }
+  const scored=COMPS.map(c=>({c,s:scoreComp(c,q)})).filter(x=>x.s>0);
+  scored.sort((a,b)=>b.s-a.s || a.c.zh.length-b.c.zh.length);
+  const shown=scored.filter(x=>state.comps.some(d=>d.id===x.c.id)).slice(0,2);
+  const pool=scored.filter(x=>!state.comps.some(d=>d.id===x.c.id));   /* 已展示的不重复加入 */
+  hlList=pool.map(x=>x.c); hlIdx=-1;
+  let html="";
+  shown.forEach(x=>{
+    html+=`<div class="row shown-row" data-shown="${x.c.id}"><span>✓ ${highlight(shortName(x.c.zh),q)}</span><span class="r-cat">${x.c.emoji} ${x.c.cat} · 已在展示，点击前往</span></div>`;
+  });
+  pool.slice(0,Math.max(6-shown.length,0)).forEach((x,i)=>{
+    html+=`<div class="row" data-i="${i}" role="option"><span>${highlight(shortName(x.c.zh),q)}</span><span><span class="r-cat">${x.c.emoji} ${x.c.cat}</span> <span class="r-month">${x.c.month}</span></span></div>`;
+  });
+  if(!html){
+    html=`<div class="empty">没有找到相关竞赛，换个关键词试试：数模 / sm / 蓝桥 / lq / rm…</div>`;
+  }
+  suggestBox.innerHTML=html;
+  suggestBox.querySelectorAll(".row[data-i]").forEach(row=>{
+    row.addEventListener("mousedown",e=>{ e.preventDefault(); addComp(hlList[+row.dataset.i].id); });
+  });
+  suggestBox.querySelectorAll(".row.shown-row").forEach(row=>{
+    row.addEventListener("mousedown",e=>{ e.preventDefault(); suggestBox.classList.remove("show"); searchInput.value=""; goToCompCard(row.dataset.shown); });
+  });
+  suggestBox.classList.add("show");
+}
+function addComp(id){
+  const c=COMPS.find(x=>x.id===id);
+  if(!c||state.comps.some(x=>x.id===id)) return;
+  state.comps.push(c);
+  render();
+  searchInput.value=""; suggestBox.classList.remove("show"); hlIdx=-1;
+  toast(`已加入「${shortName(c.zh)}」✦ 点击卡片直达官网`);
+  document.getElementById("compGrid").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+searchInput.addEventListener("input",updateSuggest);
+searchInput.addEventListener("focus",updateSuggest);
+searchInput.addEventListener("keydown",e=>{
+  if(!suggestBox.classList.contains("show")) return;
+  const rows=suggestBox.querySelectorAll(".row[data-i]");
+  if(e.key==="ArrowDown"&&rows.length){ e.preventDefault(); hlIdx=(hlIdx+1)%rows.length; rows.forEach((r,i)=>r.classList.toggle("hl",i===hlIdx)); }
+  else if(e.key==="ArrowUp"&&rows.length){ e.preventDefault(); hlIdx=(hlIdx-1+rows.length)%rows.length; rows.forEach((r,i)=>r.classList.toggle("hl",i===hlIdx)); }
+  else if(e.key==="Enter"){
+    e.preventDefault();
+    const shownRow=suggestBox.querySelector(".row.shown-row");
+    if(shownRow && hlIdx<0){ suggestBox.classList.remove("show"); searchInput.value=""; goToCompCard(shownRow.dataset.shown); return; }
+    const pick=hlIdx>=0?hlList[hlIdx]:hlList[0];
+    if(pick) addComp(pick.id);
+  }
+  else if(e.key==="Escape"){ suggestBox.classList.remove("show"); }
+});
+document.addEventListener("click",e=>{ if(!document.getElementById("searchbox").contains(e.target)) suggestBox.classList.remove("show"); });
+
+/* ================================================================
+ * 详情页（H5 风格）
+ * ================================================================ */
+const viewDetail=document.getElementById("view-detail");
+let curChapter=0;
+function openDetail(g){
+  curChapter=state.growth.findIndex(x=>x.id===g.id);
+  if(curChapter<0) curChapter=0;
+  renderDetail();
+  viewDetail.classList.add("open");
+  viewDetail.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  viewDetail.scrollTop=0;
+}
+function closeDetail(){
+  viewDetail.classList.remove("open");
+  viewDetail.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+}
+function renderDetail(){
+  const g=state.growth[curChapter];
+  if(!g){ closeDetail(); return; }
+  const sc=SCENES[g.scene];
+  document.getElementById("detailScene").innerHTML=buildScene(g.scene,g.id+"-detail",1.8);
+  document.getElementById("detailChapter").textContent=`CHAPTER ${curChapter+1} / ${state.growth.length} · ${sc.zh} ${sc.icon}`;
+  document.getElementById("detailHero").innerHTML=`
+    <div class="detail-emoji">${g.emoji}</div>
+    <h1 class="detail-title">${g.title}</h1>
+    <div class="detail-en">${g.en}</div>
+    <div class="detail-year">${g.year} · ${sc.en.toUpperCase()}</div>`;
+  document.getElementById("detailStory").innerHTML=g.story.map(p=>`<p class="story-p">${p}</p>`).join("");
+  document.getElementById("detailAch").innerHTML=g.ach.map(a=>`<li><span class="ach-check">✓</span><span>${a}</span></li>`).join("");
+  document.getElementById("detailStats").innerHTML=g.stats.map(s=>`<div class="glass d-stat"><div class="v">${s[0]}</div><div class="l">${s[1]}</div></div>`).join("");
+  document.getElementById("prevBtn").disabled=curChapter===0;
+  document.getElementById("nextBtn").disabled=curChapter===state.growth.length-1;
+  /* 重播正文入场动画 */
+  document.querySelectorAll(".detail-body").forEach(el=>{ el.style.animation="none"; void el.offsetWidth; el.style.animation=""; });
+}
+document.getElementById("backBtn").addEventListener("click",closeDetail);
+document.getElementById("prevBtn").addEventListener("click",()=>{ if(curChapter>0){curChapter--;renderDetail();viewDetail.scrollTop=0;} });
+document.getElementById("nextBtn").addEventListener("click",()=>{ if(curChapter<state.growth.length-1){curChapter++;renderDetail();viewDetail.scrollTop=0;} });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&viewDetail.classList.contains("open")) closeDetail(); });
+
+/* ================================================================
+ * Toast
+ * ================================================================ */
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"),2000);
+}
+
+/* ================================================================
+ * 真实 API：Open-Meteo 大连实时天气 + 一言
+ * ================================================================ */
+const WMO={0:["☀","晴"],1:["🌤","基本晴"],2:["⛅","多云"],3:["☁","阴"],45:["🌫","雾"],48:["🌫","雾凇"],
+ 51:["🌦","毛毛雨"],53:["🌦","毛毛雨"],55:["🌦","毛毛雨"],61:["🌧","小雨"],63:["🌧","中雨"],65:["🌧","大雨"],
+ 66:["🌧","冻雨"],67:["🌧","冻雨"],71:["🌨","小雪"],73:["🌨","中雪"],75:["❄","大雪"],77:["🌨","雪粒"],
+ 80:["🌦","阵雨"],81:["🌦","阵雨"],82:["⛈","强阵雨"],85:["🌨","阵雪"],86:["🌨","阵雪"],
+ 95:["⛈","雷阵雨"],96:["⛈","雷阵雨冰雹"],99:["⛈","雷阵雨冰雹"]};
+const weatherPill=document.getElementById("weatherPill");
+async function loadWeather(silent){
+  const txt=document.getElementById("wText"), ico=document.getElementById("wIcon");
+  if(!silent) txt.textContent="正在联络盘锦的天空…";
+  try{
+    const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=41.1176&longitude=122.0494&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia%2FShanghai");
+    const d=await r.json();
+    const c=d.current, m=WMO[c.weather_code]||["🌡","多云"];
+    ico.textContent=m[0];
+    txt.textContent=`盘锦此刻 ${Math.round(c.temperature_2m)}° ${m[1]} · 风 ${Math.round(c.wind_speed_10m)} km/h`;
+  }catch(_){ ico.textContent="🌥"; txt.textContent="盘锦 · 天空暂时失联，点我重试"; }
+}
+weatherPill.addEventListener("click",e=>{ rippleAt(weatherPill,e); loadWeather(true); toast("已向天空刷新天气 ⛅"); });
+
+const QUOTE_FALLBACKS=[
+  ["吹灭读书灯，一身都是月。","《苕溪渔隐丛话》"],
+  ["既然选择了远方，便只顾风雨兼程。","汪国真"],
+  ["每一个不曾起舞的日子，都是对生命的辜负。","尼采"]
+];
+const quotePill=document.getElementById("quotePill");
+async function loadQuote(silent){
+  const txt=document.getElementById("quoteText"), from=document.getElementById("quoteFrom");
+  if(!silent) txt.textContent="正在抄录今日份诗意…";
+  try{
+    const r=await fetch("https://v1.hitokoto.cn/?c=i&c=d&c=k&max_length=28");
+    const d=await r.json();
+    txt.textContent=`「${d.hitokoto}」`;
+    from.textContent=`—— ${d.from||"一言"}`;
+  }catch(_){
+    const f=QUOTE_FALLBACKS[Math.floor(Math.random()*QUOTE_FALLBACKS.length)];
+    txt.textContent=`「${f[0]}」`; from.textContent=`—— ${f[1]}`;
+  }
+}
+quotePill.addEventListener("click",e=>{ rippleAt(quotePill,e); loadQuote(true); toast("换了一句新话 🎐"); });
+
+/* ================================================================
+ * 初始化
+ * ================================================================ */
+(function init(){
+  const now=new Date(), wd=["日","一","二","三","四","五","六"];
+  document.getElementById("dateLine").textContent=`· ${now.getMonth()+1} 月 ${now.getDate()} 日 · 星期${wd[now.getDay()]} ·`;
+  render();
+  loadWeather(); loadQuote();
+})();
+</script>
+</body>
+</html>
